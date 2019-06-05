@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: akka.protobuf
+Bundle-Description: akka-protobuf
+Bundle-DocURL: https://doc.akka.io/api/akka/2.5.23
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0;description
+ =Apache License, Version 2.0
+Bundle-ManifestVersion: 2
+Bundle-Name: akka-protobuf
+Bundle-SymbolicName: com.typesafe.akka.protobuf
+Bundle-Vendor: Lightbend Inc.
+Bundle-Version: 2.5.23
+Export-Package: akka.protobuf;version="2.5.23"
+Implementation-Title: akka-protobuf
+Implementation-URL: https://akka.io/
+Implementation-Vendor-Id: com.typesafe.akka
+Implementation-Vendor: Lightbend Inc.
+Implementation-Version: 2.5.23
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=1.8))
+ "
+Specification-Title: akka-protobuf
+Specification-Vendor: Lightbend Inc.
+Specification-Version: 2.5.23
+Tool: Bnd-4.0.0.201805111645
+

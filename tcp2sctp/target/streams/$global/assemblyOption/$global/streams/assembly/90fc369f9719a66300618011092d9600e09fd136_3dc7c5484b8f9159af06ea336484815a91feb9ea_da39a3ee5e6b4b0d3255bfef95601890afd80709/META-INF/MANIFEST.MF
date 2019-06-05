@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: akka-io-sctp
+Implementation-Version: 0.8
+Specification-Vendor: me.arturopala
+Specification-Title: akka-io-sctp
+Implementation-Vendor-Id: me.arturopala
+Specification-Version: 0.8
+Implementation-Vendor: me.arturopala
+
