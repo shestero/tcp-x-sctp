@@ -28,7 +28,7 @@ class SctpClient(listen: InetSocketAddress, remote: InetSocketAddress) extends A
       println(s"SctpClient: set connection to $remoteAddresses assoc=${association.id}")
       println(s"!! maxOutboundStreams=${association.maxOutboundStreams}")
 
-      val ts = system.actorOf(Props(classOf[TCPServer],listen), "tcp-server")
+      val ts = context.actorOf(Props(classOf[TCPServer],listen), "tcp-server")
 
       val connection = sender
       connection ! Register(self, Some(self))
