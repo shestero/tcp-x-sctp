@@ -41,7 +41,7 @@ class TCPClientHandler(remote: InetSocketAddress, conn:Int, initial0: ByteString
 
         case Received(data) =>
           println(s"Recived @ #$conn data.size=${data.size}")
-          context.parent ! Tcp2Sctp(conn,data)
+          context.parent ! Down(conn,data)
 
         case "close" =>
           context.parent ! TCPClose(conn) // ??? probably not working
@@ -59,14 +59,14 @@ class TCPClient(remote: InetSocketAddress) extends Actor with ActorLogging {
   var pool = scala.collection.parallel.mutable.ParMap[Int,ActorRef]()
 
   def receive = {
-    case Sctp2Tcp(conn, data: ByteString) =>
+    case Up(conn, data: ByteString) =>
       println(s"TCPClient: Sctp2Tcp($conn, data.size=${data.size})")
       pool.get(conn) match {
         case Some(a:ActorRef) => a ! data
         case None => pool.put(conn,context.actorOf(Props(classOf[TCPClientHandler],remote,conn,data), "tcp-client"+conn))
       }
 
-    case t @ Tcp2Sctp(conn,data) =>
+    case t @ Down(conn,data) =>
       println(s"forwarded @ #$conn data.size=${data.size}")
       context.parent ! t   // forward
 

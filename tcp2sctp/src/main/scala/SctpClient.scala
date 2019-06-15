@@ -34,13 +34,13 @@ class SctpClient(listen: InetSocketAddress, remote: InetSocketAddress) extends A
       connection ! Register(self, Some(self))
 
       context.become({
-        case Tcp2Sctp(conn, data) => // note that this message should by send after SCTP is connected !
+        case Up(conn, data) => // note that this message should by send after SCTP is connected !
           println(s"SctpClient sending Tcp2Sctp($conn, data.size=${data.size})")
           val msg = SctpMessage(Bytes(data.asByteBuffer), streamNumber=conn)
           connection ! Send(msg, Ack(msg))
 
         case Received(message) =>
-          ts ! Sctp2Tcp(message.info.streamNumber, message.payload.toByteString)
+          ts ! Down(message.info.streamNumber, message.payload.toByteString)
           println(s"SctpClient received ${message.payload.size} byte(s) from #${message.info.streamNumber}")
 
       }, discardOld = false)

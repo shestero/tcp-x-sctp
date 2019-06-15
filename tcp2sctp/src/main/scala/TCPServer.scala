@@ -13,7 +13,7 @@ class SimplisticHandler(conn:Int) extends Actor with ActorLogging {
   def receive = {
     case Received(data) =>
       println(s"SimplisticHandler Received ${data.size} byte(s) for #$conn")
-      context.parent ! Tcp2Sctp(conn, data)
+      context.parent ! Up(conn, data)
 
     case PeerClosed     =>
       println(s"closed $conn")
@@ -55,13 +55,13 @@ class TCPServer(listen: InetSocketAddress) extends Actor with ActorLogging {
       pool-=conn
       context.parent.forward(msg) // TODO: signal into SCTP of free the chanel $conn
 
-    case Sctp2Tcp(conn, data) =>
+    case Down(conn, data) =>
       pool.get(conn) match {
         case Some(c) => c ! Write(data)
         case None => println(s"Error! No connection/wrong channel #$conn")
       }
 
-    case t @ Tcp2Sctp(conn, data) =>
+    case t @ Up(conn, data) =>
       println(s"forwarded @ #$conn data.size=${data.size}")
       context.parent ! t // forward
   }
