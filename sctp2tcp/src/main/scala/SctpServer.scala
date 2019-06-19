@@ -24,7 +24,7 @@ class SctpServer(listen: InetSocketAddress, remote: InetSocketAddress) extends A
       sender ! Register(self, Some(self)) // TODO: new handler with TCPClient for every new connection !!
       println("registred...")
 
-      val upstream = context.actorOf(Props(classOf[TCPClient], remote) ) // , "tcp-client")
+      val up = context.actorOf(Props(classOf[TCPClient], remote) ) // , "tcp-client")
 
       // see also: context.parent
       val connection = sender
@@ -36,7 +36,7 @@ class SctpServer(listen: InetSocketAddress, remote: InetSocketAddress) extends A
 
         case Received(SctpMessage(SctpMessageInfo(streamNumber, payloadProtocolID, timeToLive, unordered, bytes, association, address), payload)) =>
           println(s"received $bytes bytes from $address on stream #$streamNumber with protocolID=$payloadProtocolID and TTL=$timeToLive and assoc=${association.id}")
-          upstream ! Up(streamNumber,payload.toByteString)
+          up ! Up(streamNumber,payload.toByteString)
 
         // case x=> println("we have got something... ???:"+x)
 

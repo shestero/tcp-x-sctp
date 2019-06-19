@@ -7,7 +7,6 @@ import akka.util.{ByteString, Bytes}
 import scala.concurrent.duration._
 import AkkaMessages._
 
-
 class SctpClient(listen: InetSocketAddress, remote: InetSocketAddress) extends Actor with ActorLogging {
   import Sctp._
 
@@ -17,18 +16,18 @@ class SctpClient(listen: InetSocketAddress, remote: InetSocketAddress) extends A
 
   case class Ack(message: SctpMessage) extends Event
 
-  println(s"SctpClient trying connect ...")
-
   val sctpio = IO(Sctp)
   val maxStreams = 65535
   sctpio ! Connect(remote, maxStreams, maxStreams)
+
+  println(s"SctpClient trying connect ...")
 
   def receive: Receive = {
     case Connected(remoteAddresses, localAddresses, association) =>
       println(s"SctpClient: set connection to $remoteAddresses assoc=${association.id}")
       println(s"!! maxOutboundStreams=${association.maxOutboundStreams}")
 
-      val ts = context.actorOf(Props(classOf[TCPServer],listen), "tcp-server")
+      val down = context.actorOf(Props(classOf[TCPServer],listen), "tcp-server")
 
       val connection = sender
       connection ! Register(self, Some(self))
@@ -40,7 +39,7 @@ class SctpClient(listen: InetSocketAddress, remote: InetSocketAddress) extends A
           connection ! Send(msg, Ack(msg))
 
         case Received(message) =>
-          ts ! Down(message.info.streamNumber, message.payload.toByteString)
+          down ! Down(message.info.streamNumber, message.payload.toByteString)
           println(s"SctpClient received ${message.payload.size} byte(s) from #${message.info.streamNumber}")
 
       }, discardOld = false)
