@@ -1,4 +1,0 @@
-[0m[[0m[33mwarn[0m] [0m[0m/home/shestero/tcp-x-sctp/tcp2sctp/src/main/scala/Main.scala:46:14: This catches all Throwables. If this is really intended, use `case _ : Throwable` to clear this warning.[0m
-[0m[[0m[33mwarn[0m] [0m[0m        case _ => println("Internal error! Try to use scala version 2.11")[0m
-[0m[[0m[33mwarn[0m] [0m[0m             ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
